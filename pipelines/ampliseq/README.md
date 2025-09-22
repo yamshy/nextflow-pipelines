@@ -4,4 +4,4 @@ This configuration targets the nf-core/ampliseq pipeline using the upstream `tes
 
 Expect the workflow to finish in a few minutes with test-sized outputs in your selected `--outdir`.
 
-> Requires Nextflow `24.04.4` (later releases drop the Groovy helper used in the config include).
+> Requires Nextflow `23.10.2` (newer releases drop the Groovy helper used in the config include).

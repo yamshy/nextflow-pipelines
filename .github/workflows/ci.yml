@@ -47,7 +47,7 @@ jobs:
             ampliseq)
               WF=nf-core/ampliseq
               TAG=$AMPLISEQ
-              PIPELINE_NXF_VERSION=24.04.4
+              PIPELINE_NXF_VERSION=23.10.2
               ;;
             *)
               echo "Unknown pipeline $PIPELINE_KEY" >&2
