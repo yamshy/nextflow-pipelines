@@ -9,7 +9,7 @@ Pinned configuration, params, and helper scripts for nf-core demo runs. The Cont
 ./scripts/run_local.sh rnaseq
 ```
 
-The helper script sources `common/versions.env`, pins the release tag, and executes with `-profile test,docker` so contributors can validate changes without extra setup. It disables both Wave and Fusion by default so no Seqera credentials are required. Outputs land under `runs/<pipeline>-local/`.
+The helper script sources `common/versions.env`, pins the release tag, and executes with `-profile test,docker` so contributors can validate changes without extra setup. It disables both Wave and Fusion by default and pins `NXF_VERSION=24.04.4` so no Seqera credentials or bleeding-edge Nextflow features are required. Outputs land under `runs/<pipeline>-local/`.
 
 ## How to run on a cluster
 
@@ -30,7 +30,7 @@ Required environment variables:
 - `RESULTS_BUCKET` – base path for published results (`runs/<RUN_ID>` will be appended)
 - `NXF_S3_ENDPOINT` – optional if using a custom object store
 - `TOWER_ACCESS_TOKEN` – needed when `NXF_WAVE_ENABLED=true`
-- `NXF_WAVE_ENABLED=true` and `NXF_ENABLE_FUSION=true` are exported by the k8s script by default; override as needed.
+- `NXF_WAVE_ENABLED=true`, `NXF_ENABLE_FUSION=true`, and `NXF_VERSION=24.04.4` are exported by the k8s script by default; override as needed.
 
 ## Pipelines included
 

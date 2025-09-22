@@ -38,6 +38,7 @@ OUTDIR="${RESULTS_PREFIX}/runs/${RUN_ID}"
 
 export NXF_WAVE_ENABLED=${NXF_WAVE_ENABLED:-true}
 export NXF_ENABLE_FUSION=${NXF_ENABLE_FUSION:-true}
+export NXF_VERSION=${NXF_VERSION:-24.04.4}
 
 nextflow run "${WF}" \
   -c "${REPO_ROOT}/common/nextflow.config" \
