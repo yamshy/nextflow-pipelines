@@ -37,14 +37,17 @@ jobs:
             rnaseq)
               WF=nf-core/rnaseq
               TAG=$RNASEQ
+              PIPELINE_NXF_VERSION=25.04.7
               ;;
             viralrecon)
               WF=nf-core/viralrecon
               TAG=$VIRALRECON
+              PIPELINE_NXF_VERSION=25.04.7
               ;;
             ampliseq)
               WF=nf-core/ampliseq
               TAG=$AMPLISEQ
+              PIPELINE_NXF_VERSION=24.04.4
               ;;
             *)
               echo "Unknown pipeline $PIPELINE_KEY" >&2
@@ -53,6 +56,7 @@ jobs:
           esac
           PARAMS=pipelines/${PIPELINE_KEY}/params/toy.json
           OUTDIR=runs/${PIPELINE_KEY}-ci
+          export NXF_VERSION=${NXF_VERSION:-$PIPELINE_NXF_VERSION}
           nextflow run "$WF" \
             -c common/nextflow.config \
             -r "$TAG" \

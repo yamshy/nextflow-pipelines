@@ -9,7 +9,7 @@ Pinned configuration, params, and helper scripts for nf-core demo runs. The Cont
 ./scripts/run_local.sh rnaseq
 ```
 
-The helper script sources `common/versions.env`, pins the release tag, and executes with `-profile test,docker` so contributors can validate changes without extra setup. It disables both Wave and Fusion by default and pins `NXF_VERSION=24.04.4` so no Seqera credentials or bleeding-edge Nextflow features are required. Outputs land under `runs/<pipeline>-local/`.
+The helper script sources `common/versions.env`, pins the release tag, and executes with `-profile test,docker` so contributors can validate changes without extra setup. It disables both Wave and Fusion by default. Nextflow `25.04.7` is used for most pipelines; ampliseq automatically drops to `24.04.4` to stay compatible with its older Groovy config. Outputs land under `runs/<pipeline>-local/`.
 
 ## How to run on a cluster
 
@@ -30,22 +30,22 @@ Required environment variables:
 - `RESULTS_BUCKET` – base path for published results (`runs/<RUN_ID>` will be appended)
 - `NXF_S3_ENDPOINT` – optional if using a custom object store
 - `TOWER_ACCESS_TOKEN` – needed when `NXF_WAVE_ENABLED=true`
-- `NXF_WAVE_ENABLED=true`, `NXF_ENABLE_FUSION=true`, and `NXF_VERSION=24.04.4` are exported by the k8s script by default; override as needed.
+- `NXF_WAVE_ENABLED=true`, `NXF_ENABLE_FUSION=true`, and `NXF_VERSION` (25.04.7 normally, 24.04.4 for ampliseq) are exported by the k8s script by default; override as needed.
 
 ## Pipelines included
 
-| Pipeline key | nf-core pipeline | Tag | Expected artifacts |
-| --- | --- | --- | --- |
-| `rnaseq` | `nf-core/rnaseq` | `3.14.0` | MultiQC report, alignment stats |
-| `viralrecon` | `nf-core/viralrecon` | `2.6.0` | Consensus FASTA, QC reports |
-| `ampliseq` | `nf-core/ampliseq` | `2.7.0` | Variant tables, MultiQC report |
+| Pipeline key | nf-core pipeline | Tag | Nextflow | Expected artifacts |
+| --- | --- | --- | --- | --- |
+| `rnaseq` | `nf-core/rnaseq` | `3.14.0` | `25.04.7` | MultiQC report, alignment stats |
+| `viralrecon` | `nf-core/viralrecon` | `2.6.0` | `25.04.7` | Consensus FASTA, QC reports |
+| `ampliseq` | `nf-core/ampliseq` | `2.7.0` | `24.04.4` | Variant tables, MultiQC report |
 
 ## Control API contract
 
 - `pipelineKey` must be one of `rnaseq`, `viralrecon`, or `ampliseq`
 - `paramsPath` is fixed to `pipelines/<pipelineKey>/params/toy.json`
 - `tag` values are sourced from `common/versions.env`
-- Runtime environment injects `WORK_BUCKET`, `RESULTS_BUCKET`, `NXF_S3_ENDPOINT`, `NXF_WAVE_ENABLED` (true only if a Tower token is present), `NXF_ENABLE_FUSION=true`, and sets `RUN_ID`
+- Runtime environment injects `WORK_BUCKET`, `RESULTS_BUCKET`, `NXF_S3_ENDPOINT`, `NXF_WAVE_ENABLED` (true only if a Tower token is present), `NXF_ENABLE_FUSION=true`, sets `RUN_ID`, and selects `NXF_VERSION` based on the table above (25.04.7 by default, 24.04.4 for ampliseq)
 - The Control API launches Nextflow with `--outdir ${RESULTS_BUCKET}/runs/${RUN_ID}`
 
 ## CI
@@ -53,7 +53,7 @@ Required environment variables:
 `.github/workflows/ci.yml` runs a smoke test matrix over all three pipelines. Each job executes:
 
 ```bash
-nextflow run nf-core/<pipeline> -r <tag> -profile test,docker --outdir runs/<pipeline>-ci
+NXF_VERSION=<see table> nextflow run nf-core/<pipeline> -r <tag> -profile test,docker --outdir runs/<pipeline>-ci
 ```
 
 Brief outputs are uploaded as artifacts so maintainers can spot regressions quickly before upgrading Control API images.

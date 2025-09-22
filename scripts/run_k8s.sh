@@ -36,9 +36,20 @@ PARAMS_FILE="${REPO_ROOT}/pipelines/${PIPELINE_KEY}/params/toy.json"
 RESULTS_PREFIX=${RESULTS_BUCKET:-${REPO_ROOT}}
 OUTDIR="${RESULTS_PREFIX}/runs/${RUN_ID}"
 
+DEFAULT_NXF_VERSION=25.04.7
+
+case "${PIPELINE_KEY}" in
+  ampliseq)
+    PIPELINE_NXF_VERSION=24.04.4
+    ;;
+  *)
+    PIPELINE_NXF_VERSION=${DEFAULT_NXF_VERSION}
+    ;;
+esac
+
 export NXF_WAVE_ENABLED=${NXF_WAVE_ENABLED:-true}
 export NXF_ENABLE_FUSION=${NXF_ENABLE_FUSION:-true}
-export NXF_VERSION=${NXF_VERSION:-24.04.4}
+export NXF_VERSION=${NXF_VERSION:-${PIPELINE_NXF_VERSION}}
 
 nextflow run "${WF}" \
   -c "${REPO_ROOT}/common/nextflow.config" \
