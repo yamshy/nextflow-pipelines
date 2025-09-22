@@ -56,5 +56,5 @@ nextflow run "${WF}" \
   -r "${TAG}" \
   -profile test,docker \
   -params-file "${PARAMS_FILE}" \
-  -outdir "${OUTDIR}" \
+  --outdir "${OUTDIR}" \
   "$@"

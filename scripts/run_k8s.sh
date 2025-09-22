@@ -57,4 +57,4 @@ nextflow run "${WF}" \
   -r "${TAG}" \
   -profile k8s \
   -params-file "${PARAMS_FILE}" \
-  -outdir "${OUTDIR}"
+  --outdir "${OUTDIR}"
