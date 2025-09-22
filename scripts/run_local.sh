@@ -35,6 +35,9 @@ esac
 PARAMS_FILE="${REPO_ROOT}/pipelines/${PIPELINE_KEY}/params/toy.json"
 OUTDIR="${REPO_ROOT}/runs/${PIPELINE_KEY}-local"
 
+export NXF_WAVE_ENABLED=${NXF_WAVE_ENABLED:-false}
+export NXF_ENABLE_FUSION=${NXF_ENABLE_FUSION:-true}
+
 nextflow run "${WF}" \
   -c "${REPO_ROOT}/common/nextflow.config" \
   -r "${TAG}" \

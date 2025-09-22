@@ -29,7 +29,6 @@ jobs:
       - name: Run smoke test
         env:
           PIPELINE_KEY: ${{ matrix.pipeline }}
-          NXF_WAVE_ENABLED: 'true'
           NXF_ENABLE_FUSION: 'true'
         run: |
           set -euo pipefail

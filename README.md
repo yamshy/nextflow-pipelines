@@ -9,7 +9,7 @@ Pinned configuration, params, and helper scripts for nf-core demo runs. The Cont
 ./scripts/run_local.sh rnaseq
 ```
 
-The helper script sources `common/versions.env`, pins the release tag, and executes with `-profile test,docker` so contributors can validate changes without extra setup. Outputs land under `runs/<pipeline>-local/`.
+The helper script sources `common/versions.env`, pins the release tag, and executes with `-profile test,docker` so contributors can validate changes without extra setup. It explicitly disables Wave (no Seqera token required) while keeping Fusion enabled for quicker container IO. Outputs land under `runs/<pipeline>-local/`.
 
 ## How to run on a cluster
 
@@ -20,6 +20,7 @@ export WORK_BUCKET=s3://your-work-bucket
 export RESULTS_BUCKET=s3://your-results-bucket
 export RUN_ID=demo-001
 export NXF_S3_ENDPOINT=https://minio.example.com
+export TOWER_ACCESS_TOKEN=... # required when enabling Wave
 ./scripts/run_k8s.sh rnaseq "$RUN_ID"
 ```
 
@@ -28,7 +29,8 @@ Required environment variables:
 - `WORK_BUCKET` – location for the Nextflow work directory
 - `RESULTS_BUCKET` – base path for published results (`runs/<RUN_ID>` will be appended)
 - `NXF_S3_ENDPOINT` – optional if using a custom object store
-- `NXF_WAVE_ENABLED=true` and `NXF_ENABLE_FUSION=true` are exported by the script for convenience
+- `TOWER_ACCESS_TOKEN` – needed when `NXF_WAVE_ENABLED=true`
+- `NXF_WAVE_ENABLED=true` and `NXF_ENABLE_FUSION=true` are exported by the script by default; override as needed.
 
 ## Pipelines included
 
@@ -43,7 +45,7 @@ Required environment variables:
 - `pipelineKey` must be one of `rnaseq`, `viralrecon`, or `ampliseq`
 - `paramsPath` is fixed to `pipelines/<pipelineKey>/params/toy.json`
 - `tag` values are sourced from `common/versions.env`
-- Runtime environment injects `WORK_BUCKET`, `RESULTS_BUCKET`, `NXF_S3_ENDPOINT`, `NXF_WAVE_ENABLED=true`, `NXF_ENABLE_FUSION=true`, and sets `RUN_ID`
+- Runtime environment injects `WORK_BUCKET`, `RESULTS_BUCKET`, `NXF_S3_ENDPOINT`, `NXF_WAVE_ENABLED` (true only if a Tower token is present), `NXF_ENABLE_FUSION=true`, and sets `RUN_ID`
 - The Control API launches Nextflow with `--outdir ${RESULTS_BUCKET}/runs/${RUN_ID}`
 
 ## CI
