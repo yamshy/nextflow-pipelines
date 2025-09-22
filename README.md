@@ -30,7 +30,7 @@ Required environment variables:
 - `RESULTS_BUCKET` – base path for published results (`runs/<RUN_ID>` will be appended)
 - `NXF_S3_ENDPOINT` – optional if using a custom object store
 - `TOWER_ACCESS_TOKEN` – needed when `NXF_WAVE_ENABLED=true`
-- `NXF_WAVE_ENABLED=true`, `NXF_ENABLE_FUSION=true`, and `NXF_VERSION` (25.04.7 normally, 24.04.4 for ampliseq) are exported by the k8s script by default; override as needed.
+- `NXF_WAVE_ENABLED=true`, `NXF_ENABLE_FUSION=true`, and `NXF_VERSION`/`NXF_VER` (25.04.7 normally, 24.04.4 for ampliseq) are exported by the k8s script by default; override as needed.
 
 ## Pipelines included
 
@@ -53,7 +53,7 @@ Required environment variables:
 `.github/workflows/ci.yml` runs a smoke test matrix over all three pipelines. Each job executes:
 
 ```bash
-NXF_VERSION=<see table> nextflow run nf-core/<pipeline> -r <tag> -profile test,docker --outdir runs/<pipeline>-ci
+NXF_VERSION=<see table> NXF_VER=<same> nextflow run nf-core/<pipeline> -r <tag> -profile test,docker --outdir runs/<pipeline>-ci
 ```
 
 Brief outputs are uploaded as artifacts so maintainers can spot regressions quickly before upgrading Control API images.

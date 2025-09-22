@@ -57,6 +57,7 @@ jobs:
           PARAMS=pipelines/${PIPELINE_KEY}/params/toy.json
           OUTDIR=runs/${PIPELINE_KEY}-ci
           export NXF_VERSION=${NXF_VERSION:-$PIPELINE_NXF_VERSION}
+          export NXF_VER=${NXF_VER:-$NXF_VERSION}
           nextflow run "$WF" \
             -c common/nextflow.config \
             -r "$TAG" \

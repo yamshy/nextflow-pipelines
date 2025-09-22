@@ -49,6 +49,7 @@ esac
 export NXF_WAVE_ENABLED=${NXF_WAVE_ENABLED:-false}
 export NXF_ENABLE_FUSION=${NXF_ENABLE_FUSION:-false}
 export NXF_VERSION=${NXF_VERSION:-${PIPELINE_NXF_VERSION}}
+export NXF_VER=${NXF_VER:-${NXF_VERSION}}
 
 nextflow run "${WF}" \
   -c "${REPO_ROOT}/common/nextflow.config" \
