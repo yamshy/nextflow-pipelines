@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        pipeline: [rnaseq, viralrecon, ampliseq]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install Nextflow
+        run: |
+          curl -s https://get.nextflow.io | bash
+          sudo mv nextflow /usr/local/bin/nextflow
+
+      - name: Run smoke test
+        env:
+          PIPELINE_KEY: ${{ matrix.pipeline }}
+          NXF_WAVE_ENABLED: 'true'
+          NXF_ENABLE_FUSION: 'true'
+        run: |
+          set -euo pipefail
+          source common/versions.env
+          case "$PIPELINE_KEY" in
+            rnaseq)
+              WF=nf-core/rnaseq
+              TAG=$RNASEQ
+              ;;
+            viralrecon)
+              WF=nf-core/viralrecon
+              TAG=$VIRALRECON
+              ;;
+            ampliseq)
+              WF=nf-core/ampliseq
+              TAG=$AMPLISEQ
+              ;;
+            *)
+              echo "Unknown pipeline $PIPELINE_KEY" >&2
+              exit 1
+              ;;
+          esac
+          PARAMS=pipelines/${PIPELINE_KEY}/params/toy.json
+          OUTDIR=runs/${PIPELINE_KEY}-ci
+          nextflow run "$WF" \
+            -c common/nextflow.config \
+            -r "$TAG" \
+            -profile test,docker \
+            --params-file "$PARAMS" \
+            --outdir "$OUTDIR"
+
+      - name: Upload smoke outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.pipeline }}-runs
+          path: runs/${{ matrix.pipeline }}-ci
+          retention-days: 5
