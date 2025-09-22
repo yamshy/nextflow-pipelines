@@ -56,5 +56,5 @@ nextflow run "${WF}" \
   -c "${REPO_ROOT}/common/nextflow.config" \
   -r "${TAG}" \
   -profile k8s \
-  --params-file "${PARAMS_FILE}" \
-  --outdir "${OUTDIR}"
+  -params-file "${PARAMS_FILE}" \
+  -outdir "${OUTDIR}"

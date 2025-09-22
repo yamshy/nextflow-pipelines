@@ -9,7 +9,7 @@ Pinned configuration, params, and helper scripts for nf-core demo runs. The Cont
 ./scripts/run_local.sh rnaseq
 ```
 
-The helper script sources `common/versions.env`, pins the release tag, and executes with `-profile test,docker` so contributors can validate changes without extra setup. It disables both Wave and Fusion by default. Nextflow `25.04.7` is used for most pipelines; ampliseq automatically drops to `23.10.2` to stay compatible with its older Groovy config. Outputs land under `runs/<pipeline>-local/`.
+The helper script sources `common/versions.env`, pins the release tag, and executes with `-profile test,docker` so contributors can validate changes without extra setup. It disables both Wave and Fusion by default. Nextflow `25.04.7` is used for most pipelines; ampliseq automatically drops to `23.10.2` to stay compatible with its older Groovy config and the legacy short-form flags. Outputs land under `runs/<pipeline>-local/`.
 
 ## How to run on a cluster
 
